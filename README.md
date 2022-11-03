@@ -3,7 +3,7 @@
 ## Preamble
 Have you ever wondered why
 - Flutter and React Native can build apps for both Android and iOS.
-- Supporting "hot reload" to support quickly showing affected code changes.
+- Supporting "hot reload" to quickly show affected code changes.
 - Their performance is still a bit slower than native.
 - You've read comparisons and heard someone say that Flutter has the same performance as native because its code is compiled to native code, RN has less performance because it has to go through a bridge.
 
@@ -18,14 +18,14 @@ We should go through native app (Android, iOS) compilation process to overview b
 ## Android
 Android can be written by Java or Kotlin, so the Android compilation process, in short, is based on Java/Kotlin compilation process.
 
-- File .java/.kotlin is compiled by JAVAC (java compiler)/Kotlin compiler => java byte code (file .class).
-- With a normal java app (e.g. run on Windows, Linux), there will be a JVM (java virtual machine) converting these files to machine code and running by CPU.
+- File .java/.kotlin is compiled by JAVAC (Java compiler)/Kotlin compiler => Java byte code (file .class).
+- With a normal Java app (e.g. run on Windows, Linux), there will be a JVM (Java virtual machine) converting these files to machine code and running by CPU.
 - But with Android, this .class file will be minimized by proguard, then is compiled by Dex compiler => Dex byte code (file .dex) => .apk.
 - When you launch (start up procedure) an Android app, file .dex will be converted to machine code by DVK/ART, and fed into memory, then executed by CPU.
 
 ![android compile](photos/android.png)
 
-DVK (Dalvik Virtual Machine) or ART (Android Runtime) is a virtual machine to help you run java bytecode on Android devices.
+DVK (Dalvik Virtual Machine) or ART (Android Runtime) is a virtual machine available on OS, to help you run Java bytecode on Android devices.
 
 The difference between DVK vs ART is that ART (introduced from Android 4.4)  was built as a replacement for DVM because it uses AOT (Ahead Of Time) compilation, while DVM uses JIT (Just-In-Time). 
 JIT compilation does the compilation during the execution of a program (every time you launch an app). While AOT compilation does the compilation when the app is installed => this is key point ART makes an Android app startup faster than DVK.
@@ -33,7 +33,7 @@ JIT compilation does the compilation during the execution of a program (every ti
 You notice that, when installing the apk on the device, the app is still in bytecode, meaning the system has to take at least one step (with ART) to convert bytecode => machine code.
 
 ## iOS
-iOS compilation process can basically be based on Swift compilation process (actually there was some previous step with Xcode, but we won’t focus on this article).
+iOS compilation process, in short, based on Swift compilation process (actually there was some previous step with Xcode, but we won’t focus on this article).
 
 The swift compiler has two dimensions: Frontend and Backend (and don’t think this is web client and server).
 
@@ -94,27 +94,25 @@ Flutter compilation process basically means compile 3 layers we mentioned above,
 
 ### Performance
 - App built by Flutter not only includes your logic code (Dart) but also includes Embedder and Engine, so the app size will increase by around 5Mb compared to native (Android/iOS). Check the section [App size comparison](#app-size-comparison).
-- Even though it's built into native code, Flutter still need engine (role as a bridge) when handling task which connect with native API through platform channels, and it's asynchronously. Or using Skia to render UI, still cause [jank animation](https://docs.flutter.dev/perf/shader) at "first run" on iOS.
+- Even though it's built into native code, Flutter still need engine (role as a bridge) when (and only, not all like React Native) handling task which connect with native API (camera, audio, sensor, etc.) through platform channels, and it's asynchronously.
+- Using Skia to render UI, still cause [jank animation](https://docs.flutter.dev/perf/shader) at "first run" on iOS.
 
 ## React Native (RN)
 ### Overview architectural
 ![rn architecture](photos/rn-arch.png)
 
-JSC (JavaScriptCore, also called JS engine, written in C++) is a framework that allows JavaScript code to be run on mobile devices, for instance. On iOS devices, this framework is directly provided by the OS. Android devices don’t have the framework, so React Native bundles it along with the app itself.
+- JSC (JavaScriptCore, also called JS engine, written in C++) is a framework that allows JavaScript code to be run on mobile devices, for instance. On iOS devices, this framework is directly provided by the OS. Android devices don’t have the framework, so React Native bundles it along with the app itself.
+- RN bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON) between JS thread (where JS bundle - your logic code) and Native thread (Native UI/modules).
+- Native thread to handle UI rendering, user gestures, etc.
+- Yoga (written in C/C++) is a cross-platform layout engine.
 
-RN bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON) between JS thread (where JS bundle - your logic code) and Native thread (Native UI/modules).
-
-Native thread to handle UI rendering, user gestures, etc.
-
-Yoga (written in C/C++) is a cross-platform layout engine.
-
-Actually RN components will be converted to native (Android/iOS) components, for example:
+RN components will be converted to native (Android/iOS) view, for example in some core components:
 
 | RN component | Android view  | iOS view        |
 | ------------ | ------------- | --------------- |
 | `<Image>`    | `<ImageView>` | `<UIImageView>` |
 | `<Text>`     | `<TextView>`  | `<UITextView>`  |
-
+| ...          | ...           | ...             |
 
 ### Compilation process
 - JS code will be packaged by Metro into a JS bundle.
