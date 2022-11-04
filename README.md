@@ -141,7 +141,14 @@ But recently, RN release new Hermes (ver 0.64 for both Androd & iOS) & New Archi
 
 
 ## App size comparison
-These are the output of a blank app (I tested with their SDKs version around May 2020, and now maybe having a lot of improvements to decrease app size, but you can still refer to these figures for an overview).
+These are the output of a **blank app** (I tested with their SDKs version around May 2020, and now maybe having a lot of improvements to decrease app size, but you can still refer to these figures for an overview).
+
+### Android
+![android size](photos/android-size.png)
+
+![android detail size](photos/android-detail-size.png)
+
+Native has a small size because it contains only your logic code.
 
 ### Flutter
 ![flutter size](photos/flutter-size.png)
@@ -149,6 +156,7 @@ These are the output of a blank app (I tested with their SDKs version around May
 ![flutter detail size](photos/flutter-detail-size.png)
 
 Flutter app has to package its engine & embedder along with your logic code.
+
 Ignore app-x86-release.apk, which only has 487 KB because Flutter doesn’t support this CPU instruction set.
 
 ### React Native
@@ -158,15 +166,15 @@ Ignore app-x86-release.apk, which only has 487 KB because Flutter doesn’t supp
 
 RN app has to package its RN bridge, JSC (only on android) along with your logic code.
 
-And when optimizing with Hermes
+You can see that libjsc.so take 3.2 MB.
+
+And when optimizing with Hermes:
+
 ![rn hermes size](photos/rn-hermes-size.png)
 
 ![rn hermes detail size](photos/rn-hermes-detail-size.png)
 
-### Android
-![android size](photos/android-size.png)
-
-![android detail size](photos/android-detail-size.png)
+Hermes replaces JSC, more compact, and take only 808 KB.
 
 ### iOS
 And an .ipa size before & after adding simple Flutter module
