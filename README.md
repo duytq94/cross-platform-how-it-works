@@ -93,7 +93,7 @@ Flutter compilation process basically means compile 3 layers we mentioned above,
 ![flutter ios compile](photos/flutter-ios.png)
 
 ### Performance
-- App built by Flutter not only includes your logic code (Dart) but also includes Embedder and Engine, so the app size will increase by around 5Mb compared to native (Android/iOS). Check the section [App size comparison](#app-size-comparison).
+- App built by Flutter not only includes your logic code (Dart) but also includes Embedder and Engine, so the app size will increase by around 5 MB compared to native (Android/iOS). Check the section [App size comparison](#app-size-comparison).
 - Even though it's built into native code, Flutter still need engine (role as a bridge) when (and only, not all like React Native) handling task which connect with native API (camera, audio, sensor, etc.) through platform channels, and it's asynchronously.
 - Using Skia to render UI, still cause [jank animation](https://docs.flutter.dev/perf/shader) at "first run" on iOS.
 
@@ -101,7 +101,7 @@ Flutter compilation process basically means compile 3 layers we mentioned above,
 ### Overview architectural
 ![rn architecture](photos/rn-arch.png)
 
-- JSC (JavaScriptCore, also called JS engine, written in C++) is a framework that allows JavaScript code to be run on mobile devices, for instance. On iOS devices, this framework is directly provided by the OS. Android devices don’t have the framework, so React Native bundles it along with the app itself.
+- JSC (JavaScriptCore, also called JS engine, written in C++) is a framework that allows JavaScript code to be run on mobile devices. On iOS devices, this framework is directly provided by the OS while Android devices don't have it, so React Native needs to bundle it along with the Android app.
 - RN bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON) between JS thread (where JS bundle - your logic code) and Native thread (Native UI/modules).
 - Native thread to handle UI rendering, user gestures, etc.
 - Yoga (written in C/C++) is a cross-platform layout engine.
