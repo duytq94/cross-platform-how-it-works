@@ -2,10 +2,10 @@
 
 ## Preamble
 Have you ever wondered why
-- Flutter and React Native can build apps for both Android and iOS.
+- Flutter and React Native (RN) can build apps for both Android and iOS.
 - Supporting "hot reload" to quickly show affected code changes.
 - Their performance is still a bit slower than native.
-- You've read comparisons and heard someone say that Flutter has the same performance as native because its code is compiled to native code, RN has less performance because it has to go through a bridge.
+- You've read comparisons and heard someone say that Flutter has the same performance as native because its code is compiled to native code, React Native has less performance because it has to go through a bridge.
 
 To make clear the above questions, we will go through their architecture and compilation process.
 
@@ -13,7 +13,7 @@ Before starting, you can simply understand that the compilation (or interpretati
 
 > And for me, calling a language interpreted or compiled is not a well-defined concept. Technically it all matters depending on the implementation, not part of the language specification.
 
-We should go through native app (Android, iOS) compilation process to overview behind the scenes, then you’ll get about cross-platform (Flutter, RN) easier.
+We should go through native app (Android, iOS) compilation process to overview behind the scenes, then you’ll get about cross-platform (Flutter, React Native) easier.
 
 ## Android
 Android can be written by Java or Kotlin, so the Android compilation process, in short, is based on Java/Kotlin compilation process.
@@ -48,6 +48,8 @@ The swift compiler has two dimensions: Frontend and Backend (and don’t think t
 LLVM (Low Level Virtual Machine) is a library for programmatically creating machine-native code.
 
 iOS app is fully machine code when installed to the device, this is an advantage of iOS optimization compared to other platforms.
+
+> From native's point of view, all React Native/Flutter screens just only take an Activity/View Controller. It means when you navigate between screens, you're moving inside React Native/Flutter's navigator, not `startActivity` or `pushViewController` (similar in-app webview).
 
 ## Flutter
 Now it also supports web and desktop app, but in this article, we just focus on mobile apps (Android & iOS).
@@ -97,16 +99,16 @@ Flutter compilation process basically means compile 3 layers we mentioned above,
 - Even though it's built into native code, Flutter still need engine (role as a bridge) when (and only, not all like React Native) handling task which connect with native API (camera, audio, sensor, etc.) through platform channels, and it's asynchronously.
 - Using Skia to render UI, still cause [jank animation](https://docs.flutter.dev/perf/shader) at "first run" on iOS.
 
-## React Native (RN)
+## React Native
 ### Overview architectural
 ![rn architecture](photos/rn-arch.png)
 
 - JSC (JavaScriptCore, also called JS engine, written in C++) is a framework that allows JavaScript code to be run on mobile devices. On iOS devices, this framework is directly provided by the OS while Android devices don't have it, so React Native needs to bundle it along with the Android app.
-- RN bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON) between JS thread (where JS bundle - your logic code) and Native thread (Native UI/modules).
+- React Native bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON) between JS thread (where JS bundle - your logic code) and Native thread (Native UI/modules).
 - Native thread to handle UI rendering, user gestures, etc.
 - Yoga (written in C/C++) is a cross-platform layout engine.
 
-RN components will be converted to native (Android/iOS) view, for example in some core components:
+React Native components will be converted to native (Android/iOS) view, for example in some core components:
 
 | RN component | Android view  | iOS view        |
 | ------------ | ------------- | --------------- |
@@ -116,20 +118,20 @@ RN components will be converted to native (Android/iOS) view, for example in som
 
 ### Compilation process
 - JS code will be packaged by Metro into a JS bundle.
-- JSC, Yoga, RN bridge will be packaged along with app.
+- JSC, Yoga, React Native bridge will be packaged along with app.
 - Generate APK/IPA.
 
 ![rn compile](photos/rn-compile.png)
 
 JavaScript is an interpreted language, during debug mode, the JS code runs with Chrome (using V8 engine) instead of JSC, and communicates with native code via WebSocket. So it supports "hot reload" and allows us to see a lot of information on the Chrome debugging tools like network requests, console logs… 
 
-RN (JS code part) doesn’t be compiled to native code, every time an app launches, JSC will execute JS code, and communicate with native modules through RN bridge (which causes some performance issues).
+React Native (JS code part) doesn’t be compiled to native code, every time an app launches, JSC will execute JS code, and communicate with native modules through React Native bridge (which causes some performance issues).
 
 ### Performance
 - JavaScript is an interpreted language, need virtual machine/engine to intepret every launch app.
 - All communication (render UI, using native modules, etc.) betwwen JS and native depend on a bridge.
 
-But recently, RN release new Hermes (ver 0.64 for both Androd & iOS) & New Architecture (ver 0.68):
+But recently, React Native release new Hermes (ver 0.64 for both Androd & iOS) & New Architecture (ver 0.68):
 - Hermes is a JavaScript engine (replacement for JSC) designed to optimize performance by reducing app launch time and precompiling JavaScript into efficient bytecode (meaning now Hermes compiles JS code -> bytecode at app building time) -> no more JIT.
 - New Architecture:
    - JSI (JavaScript interface) to replace the bridge.
@@ -164,7 +166,7 @@ Ignore app-x86-release.apk, which only has 487 KB because Flutter doesn’t supp
 
 ![rn detail size](photos/rn-detail-size.png)
 
-RN app has to package its RN bridge, JSC (only on android) along with your logic code.
+React Native app has to package its bridge, JSC (only on android) along with your logic code.
 
 You can see that libjsc.so take 3.2 MB.
 
