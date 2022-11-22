@@ -68,6 +68,8 @@ You’ll see that Flutter has 3 layers that were written in different languages,
 
 Different from React Native (which converts your JS component to native component), Flutter uses Skia (a graphic engine) to render an entire UI widget by itself. So it means you can layout the same UI for both Android & iOS (including UX).
 
+When comparing between Flutter/Skia and RN/native component, although there are no specific measurements, if you come to my articles [flutter-fb-reactions-animation](https://github.com/duytq94/flutter-fb-reactions-animation) & [react-native-fb-reactions-animation](https://github.com/duytq94/react-native-fb-reactions-animation), you can feel that Flutter brings to a smoother animation than RN.
+
 How does hot reload work?
 Because Dart support both JIT (for debug) and AOT (for release), so:
 - When debugging, Flutter uses Dart VM with JIT mode, in short, it means that the developer can change the code at runtime, and only the new code that has been changed/inserted will be changed at the app, without the need to compile it again.
