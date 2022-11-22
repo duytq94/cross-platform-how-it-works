@@ -11,16 +11,16 @@ To come clean, we'll go through their architecture and compilation process.
 
 Before starting, you can simply understand that the compilation (or interpretation) process will convert your programming language (e.g. Kotlin, Swift, Dart, JavaScript…), finally into executable machine code (which the CPU can execute).
 
-> And for me, calling a language interpreted or compiled is not a well-defined concept. Technically it all matters depending on the implementation, not part of the language specification.
+> And for me, calling a language interpreted or compiled is not a well-defined concept. Technically it all matters depending on the implementation, not part of the language specification. Let read to the end of this article and you know why I said that.
 
 We should go through native app (Android, iOS) compilation process to overview behind the scenes, then you’ll get about cross-platform (Flutter, React Native) easier.
 
 ## Android
 Android can be written by Java or Kotlin, so the Android compilation process, in short, is based on Java/Kotlin compilation process.
 
-- File .java/.kotlin is compiled by JAVAC (Java compiler)/Kotlin compiler => Java byte code (file .class).
+- File .java/.kotlin is compiled by JAVAC (Java compiler)/Kotlin compiler -> Java byte code (file .class).
 - With a normal Java app (e.g. run on Windows, Linux), there will be a JVM (Java virtual machine) converting these files to machine code and running by CPU.
-- But with Android, this .class file will be minimized by proguard, then is compiled by Dex compiler => Dex byte code (file .dex) => .apk.
+- But with Android, this .class file will be minimized by proguard, then is compiled by Dex compiler -> Dex byte code (file .dex) -> .apk.
 - When you launch (start up procedure) an Android app, file .dex will be converted to machine code by DVK/ART, and fed into memory, then executed by CPU.
 
 ![android compile](photos/android.png)
@@ -28,9 +28,9 @@ Android can be written by Java or Kotlin, so the Android compilation process, in
 DVK (Dalvik Virtual Machine) or ART (Android Runtime) is a virtual machine available on OS, to help you run Java bytecode on Android devices.
 
 The difference between DVK vs ART is that ART (introduced from Android 4.4)  was built as a replacement for DVM because it uses AOT (Ahead Of Time) compilation, while DVM uses JIT (Just-In-Time). 
-JIT compilation does the compilation during the execution of a program (every time you launch an app). While AOT compilation does the compilation when the app is installed => this is key point ART makes an Android app startup faster than DVK.
+JIT compilation does the compilation during the execution of a program (every time you launch an app). While AOT compilation does the compilation when the app is installed -> this is key point ART makes an Android app startup faster than DVK.
 
-You notice that, when installing the apk on the device, the app is still in bytecode, meaning the system has to take at least one step (with ART) to convert bytecode => machine code.
+You notice that, when installing the apk on the device, the app is still in bytecode, meaning the system has to take at least one step (with ART) to convert bytecode -> machine code.
 
 ## iOS
 iOS compilation process, in short, based on Swift compilation process (actually there was some previous step with Xcode, but we won’t focus on this article).
@@ -38,9 +38,9 @@ iOS compilation process, in short, based on Swift compilation process (actually 
 The swift compiler has two dimensions: Frontend and Backend (and don’t think this is web client and server).
 
 - Frontend: does lexical analysis, parsing and semantic analysis from frontend and passes rest of the phases to the backend.
-- Backend: SwiftC (swift compiler) converts code to the form of AST (Abstract Syntax Tree) => then goes through semantic analysis and is converted into Swift Intermediate Language (SIL).
+- Backend: SwiftC (swift compiler) converts code to the form of AST (Abstract Syntax Tree) -> then goes through semantic analysis and is converted into Swift Intermediate Language (SIL).
 - This code goes through analysis and is optimized along with LLVM IR (Intermediate Representation).
-- Finally, LLVM converts them into assembly code and finally ends up in an executable file => .ipa
+- Finally, LLVM converts them into assembly code and finally ends up in an executable file -> .ipa
 
 ![iOS compile](photos/ios.png)
 
