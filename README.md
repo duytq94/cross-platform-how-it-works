@@ -7,7 +7,7 @@ Have you ever wondered why
 - Their performance is still a bit slower than native.
 - You've read comparisons and heard someone say that Flutter has the same performance as native because its code is compiled to native code, React Native has less performance because it has to go through a bridge.
 
-To make clear the above questions, we will go through their architecture and compilation process.
+To come clean, we'll go through their architecture and compilation process.
 
 Before starting, you can simply understand that the compilation (or interpretation) process will convert your programming language (e.g. Kotlin, Swift, Dart, JavaScript…), finally into executable machine code (which the CPU can execute).
 
