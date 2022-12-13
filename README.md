@@ -133,7 +133,7 @@ React Native (JS code part) doesn’t be compiled to native code, every time an 
 - JavaScript is an interpreted language, need virtual machine/engine to intepret every launch app.
 - All communication (render UI, using native modules, etc.) betwwen JS and native depend on a bridge.
 
-But recently, React Native release new Hermes (ver 0.64 for both Androd & iOS) & New Architecture (ver 0.68):
+But recently, React Native release new Hermes (from ver 0.64 for both Androd & iOS) & New Architecture (from ver 0.68):
 - Hermes is a JavaScript engine (replacement for JSC) designed to optimize performance by reducing app launch time and precompiling JavaScript into efficient bytecode (meaning now Hermes compiles JS code -> bytecode at app building time) -> no more JIT.
 - New Architecture:
    - JSI (JavaScript interface) to replace the bridge.
