@@ -5,7 +5,7 @@ Have you ever wondered why
 - Flutter and React Native (RN) can build apps for both Android and iOS.
 - Supporting "hot reload" to quickly show affected code changes.
 - Their performance is still a bit slower than native.
-- You've read comparisons and heard someone say that Flutter has the same performance as native because its code is compiled to native code, React Native has less performance because it has to go through a bridge.
+- You’ve read a comparison somewhere that says Flutter has the same performance as native because Dart source code is compiled to native code. On the other hand, React Native has less performance because it has to go through a bridge (which sometimes has bottlenecks).
 
 To come clean, we'll go through their architecture and compilation process.
 
@@ -49,7 +49,7 @@ LLVM (Low Level Virtual Machine) is a library for programmatically creating mach
 
 iOS app is fully machine code when installed to the device, this is an advantage of iOS optimization compared to other platforms.
 
-> From native's point of view, all React Native/Flutter screens just only take an Activity/View Controller. It means when you navigate between screens, you're moving inside React Native/Flutter's navigator, not `startActivity` or `pushViewController` (similar in-app webview).
+> From native's perspective, all React Native/Flutter screens just only take an Activity/View Controller. It means when you navigate between React Native/Flutter screens, you're moving inside React Native/Flutter's navigator, not `startActivity` or `pushViewController` in native code (conceivably it is similar in-app webview in this case).
 
 ## Flutter
 Now it also supports web and desktop app, but in this article, we just focus on mobile apps (Android & iOS).
@@ -131,7 +131,7 @@ React Native (JS code part) doesn’t be compiled to native code, every time an 
 
 ### Performance
 - JavaScript is an interpreted language, need virtual machine/engine to intepret every launch app.
-- All communication (render UI, using native modules, etc.) betwwen JS and native depend on a bridge.
+- All communication (render UI, using native modules, etc.) betwwen JS and native depend on a bridge -> can cause bottlenecks.
 
 But recently, React Native release new Hermes (from ver 0.64 for both Androd & iOS) & New Architecture (from ver 0.68):
 - Hermes is a JavaScript engine (replacement for JSC) designed to optimize performance by reducing app launch time and precompiling JavaScript into efficient bytecode (meaning now Hermes compiles JS code -> bytecode at app building time) -> no more JIT.
