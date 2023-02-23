@@ -4,7 +4,7 @@
 Have you ever wondered why
 - Flutter and React Native (RN) can build apps for both Android and iOS.
 - Supporting "hot reload" to quickly show affected code changes.
-- Performance is strill not as good as native.
+- Performance is still not as good as native.
 - You’ve heard somewhere that says Flutter has performance close to native because Dart code is compiled to native code. On the other hand, React Native has less performance because it has to go through a bridge (which sometimes has bottlenecks).
 
 To come clean, we're going through their architecture & compilation process.
@@ -133,7 +133,7 @@ React Native (JS code part) doesn’t be compiled to native code, every time an 
 
 ### Performance
 - JavaScript is an interpreted language, need virtual machine/engine to intepret every launch app.
-- All communication (render UI, using native modules, etc.) betwen JS and native depend on a bridge -> can cause bottlenecks, or JS thread is blocked cause UI thread jank
+- All communication (render UI, using native modules, etc.) betwen JS and native depend on a bridge -> can cause bottlenecks, or JS thread is blocked cause UI thread jank.
 
 But recently, React Native release new Hermes (from ver 0.64 for both Androd & iOS) & New Architecture (from ver 0.68):
 - Hermes is a JavaScript engine (replacement for JSC) designed to optimize performance by reducing app launch time & precompiling JavaScript into efficient bytecode (meaning now Hermes compiles JS code -> bytecode at app building time) -> no more JIT (the answer to the question at the beginning of the article about defining a language as interpreted or compiled).
