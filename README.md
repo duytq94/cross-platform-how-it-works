@@ -108,7 +108,7 @@ Flutter compilation process basically means compile 3 layers we mentioned above,
 ![rn architecture](photos/rn-arch.png)
 
 - JSC (JavaScriptCore, also called JS engine, written in C++) is a framework that allows JavaScript code to be run on mobile devices. On iOS devices, this framework is directly provided by the OS while Android devices don't have it, so React Native needs to bundle it along with the Android app.
-- React Native bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON, asynchronous) between JS thread (handle your React logic code in JS bundle) and Native thread.
+- React Native bridge (written in Java/C++) allows communication (by message JSON serialize, batch update, asynchronous) between JS thread (handle your React logic code in JS bundle) and Native thread.
 - Native (also called Main/UI) thread to handle UI rendering, user gestures...
 - Yoga (written in C/C++) is a cross-platform layout engine run on Shadow (also called Background/Layout) thread.
 
@@ -190,5 +190,12 @@ And an .ipa size before & after adding simple Flutter module
 ![ios size](photos/ios-size.png)
 
 Cross-platform always needs more size than native (since they have to include engine, virtual machine, core framework...).
+
+## Which platform we should use?
+Comparing performance between platforms to make decision on which platform to choose is not a good way, and also temporary because technology change quickly, instead, we should clear:
+- Pros & cons of each platform
+- Business requirements of the project
+- Developer's level, the human resource of the team
+From there, we can make decisions that are "appropriate" to the situation and achieve optimal results
 
 _Willing if you have any contribution or discussion._
