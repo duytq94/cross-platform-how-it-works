@@ -193,9 +193,10 @@ Cross-platform always needs more size than native (since they have to include en
 
 ## Which platform we should use?
 Comparing performance between platforms to make decision on which platform to choose is not a good way, and also temporary because technology change quickly, instead, we should clear:
-- Pros & cons of each platform
-- Business requirements of the project
-- Developer's level, the human resource of the team
-From there, we can make decisions that are "appropriate" to the situation and achieve optimal results
+- Pros & cons of each platform.
+- Business requirements of the project.
+- Developer's level, the human resource of the team.
+
+From there, we can make decisions that are "appropriate" to the situation and achieve optimal results.
 
 _Willing if you have any contribution or discussion._
