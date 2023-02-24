@@ -5,11 +5,11 @@ Have you ever wondered why
 - Flutter and React Native (RN) can build apps for both Android and iOS.
 - Supporting "hot reload" to quickly show affected code changes.
 - Performance is still not as good as native.
-- You’ve heard somewhere that says Flutter has performance close to native because Dart code is compiled to native code. On the other hand, React Native has less performance because it has to go through a bridge (which sometimes has bottlenecks).
+- You’ve heard somewhere that says Flutter has performance close to native because Dart code is compiled to native code, while React Native has less performance because it has to go through the bridge (which sometimes has bottleneck).
 
 To come clean, we're going through their architecture & compilation process.
 
-Before starting, you can simply understand that the compilation (or interpretation) process will convert your programming language (e.g. Kotlin, Swift, Dart, JavaScript…), finally into executable machine code (which the CPU can execute).
+Before starting, you can simply understand that the compilation (or interpretation) process will convert your programming language (e.g. Kotlin, Swift, Dart, JavaScript...), finally into executable machine code (which the CPU can execute).
 
 > And for me, calling a language interpreted or compiled is not a well-defined concept. Technically it all matters depending on the implementation, not part of the language specification. Let read to the end of this article and you know why I said that.
 
@@ -56,20 +56,20 @@ Now it also supports web and desktop app, but in this article, we just focus on 
 
 We know that developers can write Flutter apps by Dart, but Flutter compilation process will be a little bit different because not only Dart is compiled, but also C/C++ and more, why?
 
-### First, let's overview architectural
+### Architecture Overview
 
 ![flutter architecture](photos/flutter-arch.png)
 
 You’ll see that Flutter has 3 layers that were written in different languages, and they will explain how a Flutter app works.
 
-- Embedder is written in a language that is appropriate for the platform: currently Java and C++ for Android, Objective-C/Objective-C++ for iOS and macOS, and C++ for Windows and Linux. Embedder provides an entrypoint; coordinates with the underlying operating system for access to services like rendering surfaces, accessibility, and input; and manages the message event loop. 
+- Embedder is written in a language that is appropriate for the platform: currently Java and C++ for Android, Objective-C/Objective-C++ for iOS and macOS, and C++ for Windows and Linux. Embedder provides an entrypoint, coordinates with the underlying operating system for access to services like rendering surfaces, accessibility, and input; and manages the message event loop. 
 - Engine, which is mostly written in C++ and supports the primitives necessary to support all Flutter applications. The engine is responsible for rasterizing composited scenes whenever a new frame needs to be painted. It provides the low-level implementation of Flutter’s core API, including graphics (through Skia), text layout, file and network I/O, accessibility support, plugin architecture, and a Dart runtime and compile toolchain.
 - Framework, where most developers work, to build a Flutter app.
 
 Different from React Native (which converts your JS component to native component), Flutter uses Skia (a graphic engine, recently Impeller) to render an entire UI widget by itself. So it means you can layout the same UI for both Android & iOS (including UX).
-<br>
+
 When comparing between Flutter/Skia and RN/native component, although I haven't done specific measurement statistics yet, but if you come to my articles [flutter-fb-reactions-animation](https://github.com/duytq94/flutter-fb-reactions-animation) & [react-native-fb-reactions-animation](https://github.com/duytq94/react-native-fb-reactions-animation), you can feel that Flutter brings to a smoother animation than RN.
-<br>
+
 This happen because React Native have to calculate animation value at JS thread then send to Native (UI) thread on every frame, if JS thread is blocked => drop frames => cause jank. Using useNativeDriver could help, it move all steps to native, but not support all cases.
 
 How does hot reload work?
@@ -100,17 +100,20 @@ Flutter compilation process basically means compile 3 layers we mentioned above,
 
 ### Performance
 - App built by Flutter not only includes your logic code (Dart) but also includes Embedder & Engine, so the app size will increase by around 5 MB compared to native (Android/iOS). Check the section [App size comparison](#app-size-comparison).
-- Even though it's built into native code, Flutter still need engine (role as a bridge) when (and only, not all cases like RN bridge) handling task which connect with native API (camera, audio, sensor, etc.) through platform channels, and it's asynchronously.
+- Even though it's built into native code, Flutter still need engine (role as a bridge) when (and only, not all cases like RN bridge) handling task which connect with native API (camera, audio, sensor...) through platform channels, and it's asynchronously.
 - Using Skia to render UI, still cause [jank animation](https://docs.flutter.dev/perf/shader) at "first run" on iOS.
 
 ## React Native
-### Overview architectural
+### Architecture Overview
 ![rn architecture](photos/rn-arch.png)
 
 - JSC (JavaScriptCore, also called JS engine, written in C++) is a framework that allows JavaScript code to be run on mobile devices. On iOS devices, this framework is directly provided by the OS while Android devices don't have it, so React Native needs to bundle it along with the Android app.
-- React Native bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON, asynchronous) between JS thread (where JS bundle - your logic code) and Native thread (Native UI/modules).
-- Native (also called Main/UI) thread to handle UI rendering, user gestures, etc.
-- Yoga (written in C/C++) is a cross-platform layout engine.
+- React Native bridge (written in Java/C++) allows communication (by message, sent as a serialized JSON, asynchronous) between JS thread (handle your React logic code in JS bundle) and Native thread.
+- Native (also called Main/UI) thread to handle UI rendering, user gestures...
+- Yoga (written in C/C++) is a cross-platform layout engine run on Shadow (also called Background/Layout) thread.
+
+The image below describes communication between threads to handle a user action, for example scrolling a list
+![rn threading](photos/rn-threading.png)
 
 React Native components will be converted to native (Android/iOS) view, for example in some core components:
 
@@ -127,13 +130,13 @@ React Native components will be converted to native (Android/iOS) view, for exam
 
 ![rn compile](photos/rn-compile.png)
 
-JavaScript is an interpreted language, during debug mode, the JS code runs with Chrome (using V8 engine) instead of JSC, and communicates with native code via WebSocket. So it supports "hot reload" and allows us to see a lot of information on the Chrome debugging tools like network requests, console logs… 
+JavaScript is an interpreted language, during debug mode, the JS code runs with Chrome (using V8 engine) instead of JSC, and communicates with native code via WebSocket. So it supports "hot reload" and allows us to see a lot of information on the Chrome debugging tools like network requests, console logs...
 
 React Native (JS code part) doesn’t be compiled to native code, every time an app launches, JSC will execute JS code, and communicate with native modules through React Native bridge (which causes some performance issues).
 
 ### Performance
 - JavaScript is an interpreted language, need virtual machine/engine to intepret every launch app.
-- All communication (render UI, using native modules, etc.) betwen JS and native depend on a bridge -> can cause bottlenecks, or JS thread is blocked cause UI thread jank.
+- All communication (render UI, using native modules...) between JS and native depends on the bridge with asynchronous -> bottleneck, not ensure realtime update, or JS thread is blocked cause UI thread jank.
 
 But recently, React Native release new Hermes (from ver 0.64 for both Androd & iOS) & New Architecture (from ver 0.68):
 - Hermes is a JavaScript engine (replacement for JSC) designed to optimize performance by reducing app launch time & precompiling JavaScript into efficient bytecode (meaning now Hermes compiles JS code -> bytecode at app building time) -> no more JIT (the answer to the question at the beginning of the article about defining a language as interpreted or compiled).
@@ -186,6 +189,6 @@ Hermes replaces JSC, more compact, and take only 808 KB.
 And an .ipa size before & after adding simple Flutter module
 ![ios size](photos/ios-size.png)
 
-Cross-platform always needs more size than native (since they have to include engine, virtual machine, core framework, etc.).
+Cross-platform always needs more size than native (since they have to include engine, virtual machine, core framework...).
 
 _Willing if you have any contribution or discussion._
