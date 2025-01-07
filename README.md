@@ -63,12 +63,12 @@ We know that developers can write Flutter apps by Dart, but Flutter compilation 
 You’ll see that Flutter has 3 layers that were written in different languages, and they will explain how a Flutter app works.
 
 - Embedder is written in a language that is appropriate for the platform: currently Java and C++ for Android, Objective-C/Objective-C++ for iOS and macOS, and C++ for Windows and Linux. Embedder provides an entrypoint, coordinates with the underlying operating system for access to services like rendering surfaces, accessibility, and input; and manages the message event loop. 
-- Engine, which is mostly written in C++ and supports the primitives necessary to support all Flutter applications. The engine is responsible for rasterizing composited scenes whenever a new frame needs to be painted. It provides the low-level implementation of Flutter’s core API, including graphics (through Skia), text layout, file and network I/O, accessibility support, plugin architecture, and a Dart runtime and compile toolchain.
+- Engine, which is mostly written in C++ and supports the primitives necessary to support all Flutter applications. The engine is responsible for rasterizing composited scenes whenever a new frame needs to be painted. It provides the low-level implementation of Flutter’s core API, including graphics (through Impeller), text layout, file and network I/O, accessibility support, plugin architecture, and a Dart runtime and compile toolchain.
 - Framework, where most developers work, to build a Flutter app.
 
-Different from React Native (which converts your JS component to native component), Flutter uses Skia (a graphic engine, recently Impeller) to render an entire UI widget by itself. So it means you can layout the same UI for both Android & iOS (including UX).
+Different from React Native (which converts your JS component to native component), Flutter uses Impeller to render an entire UI widget by itself. So it means you can layout the same UI for both Android & iOS (including UX).
 
-When comparing between Flutter/Skia and RN/native component, although I haven't done specific measurement statistics yet, but if you come to my articles [flutter-fb-reactions-animation](https://github.com/duytq94/flutter-fb-reactions-animation) & [react-native-fb-reactions-animation](https://github.com/duytq94/react-native-fb-reactions-animation), you can feel that Flutter brings to a smoother animation than RN.
+When comparing between Flutter/Impeller and RN/native component, although I haven't done specific measurement statistics yet, but if you come to my articles [flutter-fb-reactions-animation](https://github.com/duytq94/flutter-fb-reactions-animation) & [react-native-fb-reactions-animation](https://github.com/duytq94/react-native-fb-reactions-animation), you can feel that Flutter brings to a smoother animation than RN.
 
 This happen because React Native have to calculate animation value at JS thread then send to Native (UI) thread on every frame, if JS thread is blocked => drop frames => cause jank. Using useNativeDriver could help, it move all steps to native, but not support all cases.
 
@@ -101,7 +101,6 @@ Flutter compilation process basically means compile 3 layers we mentioned above,
 ### Performance
 - App built by Flutter not only includes your logic code (Dart) but also includes Embedder & Engine, so the app size will increase by around 5 MB compared to native (Android/iOS). Check the section [App size comparison](#app-size-comparison).
 - Even though it's built into native code, Flutter still need engine (role as a bridge) when (and only, not all cases like RN bridge) handling task which connect with native API (camera, audio, sensor...) through platform channels, and it's asynchronously.
-- Using Skia to render UI, still cause [jank animation](https://docs.flutter.dev/perf/shader) at "first run" on iOS.
 
 ## React Native
 ### Architecture Overview
