@@ -25,7 +25,7 @@ Android can be written by Java or Kotlin, so the Android compilation process, in
 
 ![android compile](photos/android.png)
 
-DVK (Dalvik Virtual Machine) or ART (Android Runtime) is a virtual machine available on OS, to help you run Java bytecode on Android devices.
+DVK (Dalvik Virtual Machine) or ART (Android Runtime) is a virtual machine available on OS, to help you run Dalvik bytecode on Android devices.
 
 The difference between DVK vs ART is that ART (introduced from Android 4.4)  was built as a replacement for DVM because it uses AOT (Ahead Of Time) compilation, while DVM uses JIT (Just-In-Time). 
 JIT compilation does the compilation during the execution of a program (every time you launch an app). While AOT compilation does the compilation when the app is installed -> this is key point ART makes an Android app startup faster than DVK.
