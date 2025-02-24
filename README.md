@@ -27,10 +27,8 @@ Android can be written by Java or Kotlin, so the Android compilation process, in
 
 DVK (Dalvik Virtual Machine) or ART (Android Runtime) is a virtual machine available on OS, to help you run Dalvik bytecode on Android devices.
 
-The difference between DVK vs ART is that ART (introduced from Android 4.4)  was built as a replacement for DVM because it uses AOT (Ahead Of Time) compilation, while DVM uses JIT (Just-In-Time). 
-JIT compilation does the compilation during the execution of a program (every time you launch an app). While AOT compilation does the compilation when the app is installed -> this is key point ART makes an Android app startup faster than DVK.
-
-You notice that, when installing the apk on the device, the app is still in bytecode, meaning the system has to take at least one step (with ART) to convert bytecode -> machine code.
+The difference between DVK vs ART is that ART (introduced from Android 4.4) was built as a replacement for DVM because it uses AOT (Ahead Of Time) compilation, while DVM uses JIT (Just-In-Time). 
+JIT compilation does the compilation during the execution of a program (every time you launch an app). While AOT compilation does the compilation when the app is first install -> this is key point ART makes an Android app running faster than DVK.
 
 ## iOS
 iOS compilation process, in short, based on Swift compilation process (actually there was some previous step with Xcode, but we won’t focus on this article).
